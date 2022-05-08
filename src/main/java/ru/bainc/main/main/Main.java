@@ -1,12 +1,12 @@
 package ru.bainc.main.main;
-import static ru.bainc.main.model.Employee.loadEmployeeListFromFile;
-import static ru.bainc.main.model.Employee.saveEmployeeListToFile;
-import static ru.bainc.main.service.EmployeeService.getList;
+
+
+import ru.bainc.main.service.EmployeeService;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        saveEmployeeListToFile(getList(), "employees.csv");
-        System.out.println(loadEmployeeListFromFile("employees.csv"));
+        EmployeeService.saveEmployeeListToFile(EmployeeService.getList(), "employees.csv");
+        System.out.println(EmployeeService.loadEmployeeListFromFile("employees.csv"));
     }
 
 }

@@ -1,5 +1,10 @@
 package ru.bainc.main.service;
 import ru.bainc.main.model.Employee;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +33,42 @@ public class EmployeeService {
         result.add(new Employee(19, "Alexsey", "Victorovich", "Melnikov", 52, "spesialist", 300));
         result.add(new Employee(20, "Victoria", "Anatolevna", "Polykova", 50, "glavbuch", 350));
         return result;
+
+    }
+    public static boolean saveEmployeeListToFile(List<Employee> employeeList, String path) {
+        try {
+            FileWriter writer = new FileWriter(path);
+            for (Employee employee: employeeList) {
+                writer.write(employee.toCSVString());
+            }
+            writer.flush();
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+
+    }
+
+    public static List<Employee> loadEmployeeListFromFile(String path) throws Exception {
+        List<Employee> employeeList = new ArrayList<>();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] employeeCsv = line.split(";");
+                if (employeeCsv.length != 7) {
+                    throw new Exception("Не верное количество полей");
+                }
+                Employee employeeObj = new Employee(Integer.parseInt(employeeCsv[0]),
+                        employeeCsv[1],
+                        employeeCsv[2],
+                        employeeCsv[3],
+                        Integer.parseInt(employeeCsv[4]),
+                        employeeCsv[5],
+                        Integer.parseInt(employeeCsv[6]));
+                employeeList.add(employeeObj);
+            }
+        }
+        return employeeList;
 
     }
 }
